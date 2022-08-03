@@ -21,6 +21,7 @@ body {
   background-attachment: fixed;
   font-family: "Barlow Semi Condensed";
   text-transform: uppercase;
+  color: white;
 }
 
 header {
@@ -91,20 +92,6 @@ header {
   grid-column: span 2;
 }
 
-.result-grid-item {
-  margin: 0 auto;
-}
-
-.result-grid-item:nth-of-type(1) {
-  grid-row: 1;
-}
-
-.result-grid-item:nth-of-type(3) {
-  grid-row: 2;
-  grid-column: span 2;
-  visibility: hidden;
-}
-
 .choice-border {
   cursor: pointer;
   display: flex;
@@ -113,6 +100,7 @@ header {
   border-radius: 50%;
   width: 130px;
   height: 130px;
+  border: 0;
 }
 @media (hover: hover) {
   .choice-border:hover {
@@ -168,26 +156,26 @@ header {
   font-weight: 700;
 }
 
-.result-grid-item {
+/* HOUSE LOADING */
+.choice-grid-item.loading {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2.5rem;
 }
 
-.result-grid-item p {
-  color: white;
-  margin-top: 1.5rem;
-  font-size: 0.9rem;
-  letter-spacing: 0.18em;
+.choice-grid-item.loading .choice-border {
+  transform: none;
 }
 
-.choice-grid-container.result {
-  background-image: unset;
-  pointer-events: none;
+.choice-grid-item.loading p,
+.choice-grid-item.show-result p {
+  margin-top: 1rem;
 }
 
-/* HOUSE LOADING */
+.choice-grid-item.show-result p {
+  margin-left: 0.25rem;
+}
+
 .choice-grid-item:nth-of-type(2).loading .choice-white-circle {
   background-color: hsla(237deg, 49%, 15%, 0.6);
   border: 0;
@@ -195,6 +183,8 @@ header {
 
 .choice-grid-item:nth-of-type(2).loading .choice-border {
   background-image: none;
+  border: 0;
+  background-color: transparent;
 }
 
 /* hide icon */
@@ -202,6 +192,22 @@ header {
   display: none;
 }
 
+.choice-grid-item:nth-of-type(3).loading,
+.choice-grid-item:nth-of-type(3).loading + * {
+  display: none;
+}
+
 .choice-grid-container.loading {
   background-image: none;
+  pointer-events: none;
+  display: flex;
+}
+
+.choice-grid-container.show-result {
+  background-image: unset;
+  pointer-events: none;
+}
+
+.choice-grid-container.loading + .rules-btn-container {
+  margin-top: calc(130px + 7.25rem);
 }/*# sourceMappingURL=App.css.map */

@@ -1,17 +1,14 @@
 import React, { useContext } from "react";
 import { GameContext } from "../gameContext";
 
-const Button = ({ choiceObj, handleMove }) => {
-	const { houseLoading } = useContext(GameContext);
+const Button = ({ choiceObj, handleMove, showResult }) => {
 	return (
-		<div className={`choice-grid-item ${houseLoading ? "loading" : ""}`}>
-			<div
-				onClick={() => handleMove(choiceObj)}
-				className={`choice-border ${choiceObj.name}`}
-			>
-				<div className="choice-white-circle">{choiceObj.svg}</div>
-			</div>
-		</div>
+		<button
+			onClick={() => handleMove(choiceObj)}
+			className={`choice-border ${choiceObj.name}`}
+		>
+			<div className="choice-white-circle">{choiceObj.svg}</div>
+		</button>
 	);
 };
 
