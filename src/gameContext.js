@@ -56,9 +56,12 @@ const GameContext = createContext();
 const GameContextProvider = (props) => {
 	const [move, setMove] = useState(null);
 	const [houseMove, setHouseMove] = useState(null);
-	const [showResult, setShowResult] = useState(false);
 	const [score, setScore] = useState(0);
+	const [result, setResult] = useState("");
 
+	const [showResult, setShowResult] = useState(false);
+	const [showRules, setShowRules] = useState(false);
+	const [showPlayAgain, setShowPlayAgain] = useState(false);
 	const [houseLoading, setHouseLoading] = useState(false);
 	return (
 		<GameContext.Provider
@@ -68,12 +71,18 @@ const GameContextProvider = (props) => {
 				setMove,
 				houseMove,
 				setHouseMove,
+				result,
+				setResult,
 				showResult,
 				setShowResult,
 				score,
 				setScore,
 				houseLoading,
 				setHouseLoading,
+				showRules,
+				setShowRules,
+				showPlayAgain,
+				setShowPlayAgain,
 			}}
 		>
 			{props.children}

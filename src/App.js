@@ -1,7 +1,8 @@
 import "./App.css";
 import Header from "./components/Header";
 import Button from "./components/Button";
-// import Result from "./components/Result";
+import Rules from "./components/Rules";
+import PlayAgain from "./components/PlayAgain";
 import { useEffect, useContext } from "react";
 import { GameContext } from "./gameContext";
 
@@ -11,23 +12,32 @@ function App() {
 		houseMove,
 		setMove,
 		setHouseMove,
+		setResult,
 		showResult,
 		setShowResult,
 		setScore,
 		choiceData,
 		houseLoading,
 		setHouseLoading,
+		showRules,
+		setShowRules,
+		showPlayAgain,
+		setShowPlayAgain,
 	} = useContext(GameContext);
 
-	/* set score after selecting, then wait to set pickedMode to false */
+	/* set score after selecting */
 	useEffect(() => {
 		if (showResult === true) {
+			if (move.name === houseMove.name) {
+				setResult("draw");
+			}
 			if (
 				(move.name === "rock" && houseMove.name === "scissors") ||
 				(move.name === "scissors" && houseMove.name === "paper") ||
 				(move.name === "paper" && houseMove.name === "rock")
 			) {
 				setScore((prevScore) => prevScore + 1);
+				setResult("win");
 			}
 			if (
 				(move.name === "rock" && houseMove.name === "paper") ||
@@ -35,6 +45,7 @@ function App() {
 				(move.name === "paper" && houseMove.name === "scissors")
 			) {
 				setScore((prevScore) => prevScore - 1);
+				setResult("lose");
 			}
 		}
 	}, [showResult]);
@@ -42,20 +53,26 @@ function App() {
 	function handleMove(moveObj) {
 		setMove(moveObj);
 		setHouseMove(choiceData[Math.floor(Math.random() * choiceData.length)]);
-		let timer;
 		setHouseLoading(true);
+		let timer;
 		timer = setTimeout(() => {
 			setShowResult(true);
 			setTimeout(() => {
-				setShowResult(false);
-				setHouseLoading(false);
+				setShowPlayAgain(true);
 			}, 1000);
 		}, 1000);
 		return () => clearTimeout(timer);
 	}
 
+	function handlePlayAgain() {
+		setShowPlayAgain(false);
+		setShowResult(false);
+		setHouseLoading(false);
+	}
+
 	return (
 		<div className="App">
+			{showRules && <Rules />}
 			<Header />
 			<div
 				className={`choice-grid-container ${
@@ -117,9 +134,10 @@ function App() {
 					</>
 				)}
 			</div>
-			<div className="rules-btn-container">
-				<button className="rules-btn">rules</button>
-			</div>
+			{showPlayAgain && <PlayAgain handlePlayAgain={handlePlayAgain} />}
+			<button className="rules-btn" onClick={() => setShowRules(true)}>
+				rules
+			</button>
 		</div>
 	);
 }

@@ -13,7 +13,15 @@ body {
 }
 
 .App {
-  max-height: 100vh;
+  height: calc(100vh - 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.App > * {
+  width: 100%;
 }
 
 body {
@@ -32,6 +40,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  max-width: 650px;
 }
 
 .title {
@@ -66,7 +75,7 @@ header {
 }
 
 .choice-grid-container {
-  margin: 7rem auto 0;
+  margin: 5rem auto 0;
   display: grid;
   max-width: 400px;
   grid-template: 120px 120px/1fr 1fr;
@@ -135,25 +144,22 @@ header {
   border-bottom: 5px solid white;
 }
 
-.rules-btn-container {
-  margin: 8.75rem auto 4rem;
-  display: flex;
-}
-
 .rules-btn {
+  width: auto;
   padding: 0.55rem 2rem;
   border: 2px solid rgba(255, 255, 255, 0.4);
   color: #ddd;
-  display: inline-block;
   letter-spacing: 3px;
   border-radius: 7px;
   background-color: transparent;
   text-transform: uppercase;
   font-family: "Barlow Semi Condensed";
   cursor: pointer;
-  margin: 0 auto 3.5rem;
   font-size: 1rem;
   font-weight: 700;
+  position: relative;
+  bottom: 2rem;
+  margin-top: auto;
 }
 
 /* HOUSE LOADING */
@@ -187,11 +193,12 @@ header {
   background-color: transparent;
 }
 
-/* hide icon */
+/* hide choice icon while loading*/
 .choice-grid-item:nth-of-type(2).loading .choice-white-circle > * {
   display: none;
 }
 
+/* end hide choice icon while loading */
 .choice-grid-item:nth-of-type(3).loading,
 .choice-grid-item:nth-of-type(3).loading + * {
   display: none;
@@ -208,6 +215,112 @@ header {
   pointer-events: none;
 }
 
-.choice-grid-container.loading + .rules-btn-container {
-  margin-top: calc(130px + 7.25rem);
+/* rules */
+body {
+  position: relative;
+}
+
+.rules-container {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+
+.rules-card {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  background-color: white;
+  color: black;
+  box-shadow: 100px 200px 5000px 5000px hsla(237deg, 51%, 7%, 0.9);
+  padding: 1.75rem 2.2rem 2.25rem;
+  border-radius: 10px;
+}
+
+.rules-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 2rem;
+}
+
+.rules-header > svg {
+  cursor: pointer;
+}
+
+.rules-heading {
+  font-size: 2rem;
+}
+
+/* end rules */
+/* play again */
+.play-again-container {
+  width: 100%;
+  margin: 2rem auto;
+}
+
+.play-again-result {
+  text-align: center;
+  font-size: 3.5rem;
+}
+
+.play-again-btn {
+  margin: 2rem auto 0;
+  display: block;
+  text-align: center;
+  border: 0;
+  border-radius: 10px;
+  background-color: white;
+  padding: 1rem 4rem;
+  text-transform: uppercase;
+  font-family: "Barlow Semi Condensed";
+  font-size: 1rem;
+  color: hsl(229deg, 25%, 31%);
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+
+/* end play again */
+/* add circle borders when result shows */
+.choice-grid-container.show-result .choice-border {
+  box-shadow: 0 0 0 10px blue;
+  box-shadow: 0 0 0 15px rgba(255, 255, 255, 0.04), 0 0 0 35px rgba(255, 255, 255, 0.03), 0 0 0 70px rgba(255, 255, 255, 0.02);
+}
+
+@media (min-width: 850px) {
+  body {
+    position: relative;
+  }
+  .App {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  header {
+    padding: 1.5rem 1.5rem;
+    width: 100%;
+  }
+  .title {
+    font-size: 2.5rem;
+  }
+  .score-card {
+    transform: scale(1.5);
+    margin-right: 1.5rem;
+  }
+  .rules-btn {
+    margin: 0;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: 2rem;
+  }
+  .choice-grid-container {
+    transform: scale(1.33);
+    width: 100%;
+    margin-top: 4rem;
+  }
 }/*# sourceMappingURL=App.css.map */

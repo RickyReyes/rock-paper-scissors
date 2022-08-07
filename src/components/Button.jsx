@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { GameContext } from "../gameContext";
+import React from "react";
 
 const Button = ({ choiceObj, handleMove, showResult }) => {
 	return (
