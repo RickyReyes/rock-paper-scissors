@@ -1,18 +1,18 @@
-import React, { useContext } from "react";
-import { GameContext } from "../gameContext";
+import React from "react";
 
-const Header = () => {
-	const { score } = useContext(GameContext);
+const Header = ({ score }) => {
 	return (
 		<header>
-			<h1 className="title">
-				<span>Rock</span>
-				<span>Paper</span>
-				<span>Scissors</span>
-			</h1>
-			<div className="score-card">
-				<p className="score-word">score</p>
-				<div className="score-number">{score}</div>
+			<ul className="header__name-list">
+				<li className="header__name-item">Rock</li>
+				<li className="header__name-item">Paper</li>
+				<li className="header__name-item">Scissors</li>
+				<li className="header__name-item">Lizard</li>
+				<li className="header__name-item">Spock</li>
+			</ul>
+			<div className="header__score-card">
+				<small className="header__score-word">score</small>
+				<div className="header__score">{score}</div>
 			</div>
 		</header>
 	);

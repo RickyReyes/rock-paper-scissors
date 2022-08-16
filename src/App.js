@@ -1,142 +1,189 @@
 import "./App.css";
+import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Button from "./components/Button";
 import Rules from "./components/Rules";
-import PlayAgain from "./components/PlayAgain";
-import { useEffect, useContext } from "react";
-import { GameContext } from "./gameContext";
 
 function App() {
-	const {
-		move,
-		houseMove,
-		setMove,
-		setHouseMove,
-		setResult,
-		showResult,
-		setShowResult,
-		setScore,
-		choiceData,
-		houseLoading,
-		setHouseLoading,
-		showRules,
-		setShowRules,
-		showPlayAgain,
-		setShowPlayAgain,
-	} = useContext(GameContext);
+	const choiceData = [
+		{
+			name: "spock",
+			imgSrc: "../images/icon-spock.svg",
+		},
+		{
+			name: "scissors",
+			imgSrc: "../images/icon-scissors.svg",
+		},
+		{
+			name: "paper",
+			imgSrc: "../images/icon-paper.svg",
+		},
+		{
+			name: "lizard",
+			imgSrc: "../images/icon-lizard.svg",
+		},
+		{
+			name: "rock",
+			imgSrc: "../images/icon-rock.svg",
+		},
+	];
 
-	/* set score after selecting */
-	useEffect(() => {
-		if (showResult === true) {
-			if (move.name === houseMove.name) {
-				setResult("draw");
-			}
-			if (
-				(move.name === "rock" && houseMove.name === "scissors") ||
-				(move.name === "scissors" && houseMove.name === "paper") ||
-				(move.name === "paper" && houseMove.name === "rock")
-			) {
-				setScore((prevScore) => prevScore + 1);
-				setResult("win");
-			}
-			if (
-				(move.name === "rock" && houseMove.name === "paper") ||
-				(move.name === "scissors" && houseMove.name === "rock") ||
-				(move.name === "paper" && houseMove.name === "scissors")
-			) {
-				setScore((prevScore) => prevScore - 1);
-				setResult("lose");
-			}
-		}
-	}, [showResult]);
+	const [score, setScore] = useState(0);
+	const [myMove, setMyMove] = useState(null);
+	const [oppMove, setOppMove] = useState(null);
+	const [winner, setWinner] = useState(null);
+	const [showOppMove, setShowOppMove] = useState(false);
+	const [showRules, setShowRules] = useState(false);
+	const [loading, setLoading] = useState(false);
 
-	function handleMove(moveObj) {
-		setMove(moveObj);
-		setHouseMove(choiceData[Math.floor(Math.random() * choiceData.length)]);
-		setHouseLoading(true);
-		let timer;
-		timer = setTimeout(() => {
-			setShowResult(true);
-			setTimeout(() => {
-				setShowPlayAgain(true);
-			}, 1000);
-		}, 1000);
-		return () => clearTimeout(timer);
+	function handleMyMove(name) {
+		setMyMove(...choiceData.filter((choice) => choice.name === name));
+		setLoading(true);
 	}
 
 	function handlePlayAgain() {
-		setShowPlayAgain(false);
-		setShowResult(false);
-		setHouseLoading(false);
+		setShowOppMove(false);
 	}
+
+	function decideWinner(myMoveName, oppMoveName) {
+		if (myMoveName === oppMoveName) {
+			setWinner("draw");
+		}
+		if (myMoveName === "rock") {
+			if (oppMoveName === "lizard" || oppMoveName === "scissors") {
+				setWinner("me");
+			}
+			if (oppMoveName === "paper" || oppMoveName === "spock") {
+				setWinner("house");
+			}
+		}
+		if (myMoveName === "lizard") {
+			if (oppMoveName === "spock" || oppMoveName === "paper") {
+				setWinner("me");
+			}
+			if (oppMoveName === "rock" || oppMoveName === "scissors") {
+				setWinner("house");
+			}
+		}
+		if (myMoveName === "spock") {
+			if (oppMoveName === "scissors" || oppMoveName === "rock") {
+				setWinner("me");
+			}
+			if (oppMoveName === "lizard" || oppMoveName === "paper") {
+				setWinner("house");
+			}
+		}
+		if (myMoveName === "scissors") {
+			if (oppMoveName === "paper" || oppMoveName === "lizard") {
+				setWinner("me");
+			}
+			if (oppMoveName === "spock" || oppMoveName === "rock") {
+				setWinner("house");
+			}
+		}
+		if (myMoveName === "paper") {
+			if (oppMoveName === "rock" || oppMoveName === "spock") {
+				setWinner("me");
+			}
+			if (oppMoveName === "scissors" || oppMoveName === "lizard") {
+				setWinner("house");
+			}
+		}
+		console.log(winner);
+	}
+
+	useEffect(() => {
+		let timer;
+		let timer2;
+		if (myMove) {
+			timer = setTimeout(() => {
+				setOppMove(
+					choiceData[Math.floor(Math.random() * choiceData.length)]
+				);
+				timer2 = setTimeout(() => {
+					setLoading(false);
+					setShowOppMove(true);
+				}, 750);
+			}, 800);
+		}
+		return () => {
+			clearTimeout(timer);
+			clearTimeout(timer2);
+		};
+	}, [myMove]);
+
+	useEffect(() => {
+		if (showOppMove) {
+			decideWinner(myMove.name, oppMove.name);
+		}
+	}, [showOppMove]);
 
 	return (
 		<div className="App">
-			{showRules && <Rules />}
-			<Header />
-			<div
-				className={`choice-grid-container ${
-					showResult ? "show-result" : ""
-				} ${houseLoading ? "loading" : ""}`}
-			>
-				{!showResult && !houseLoading ? (
-					choiceData.map((choiceObj, idx) => {
-						return (
-							<div
-								className={`choice-grid-item ${
-									houseLoading ? "loading" : ""
-								}`}
-							>
-								<Button
-									handleMove={handleMove}
-									key={choiceObj.name}
-									choiceObj={choiceObj}
-								/>
-								{houseLoading && (
-									<p>
-										{idx === 0
-											? "You picked"
-											: idx === 1
-											? "The house picked"
-											: ""}
-									</p>
-								)}
-							</div>
-						);
-					})
-				) : !showResult && houseLoading ? (
-					<>
-						<div className="choice-grid-item loading">
-							<Button handleMove={handleMove} choiceObj={move} />
-							<p>You picked</p>
-						</div>
-						<div className="choice-grid-item loading">
+			{showRules && <Rules setShowRules={setShowRules} />}
+			<Header score={score} />
+			{!loading && !showOppMove ? (
+				<div className="buttons">
+					<div className="buttons-top">
+						{choiceData.slice(0, 3).map((choiceObj) => (
 							<Button
-								handleMove={handleMove}
-								choiceObj={houseMove}
+								key={choiceObj.name}
+								moveObj={choiceObj}
+								handleMyMove={handleMyMove}
 							/>
-							<p>The house picked</p>
-						</div>
-					</>
-				) : (
-					<>
-						<div className="choice-grid-item loading">
-							<Button handleMove={handleMove} choiceObj={move} />
-							<p>You picked</p>
-						</div>
-						<div className="choice-grid-item show-result">
+						))}
+					</div>
+					<div className="buttons-bottom">
+						{choiceData.slice(3, 5).map((choiceObj) => (
 							<Button
-								handleMove={handleMove}
-								choiceObj={houseMove}
+								key={choiceObj.name}
+								moveObj={choiceObj}
+								handleMyMove={handleMyMove}
 							/>
-							<p>The house picked</p>
-						</div>
-					</>
-				)}
-			</div>
-			{showPlayAgain && <PlayAgain handlePlayAgain={handlePlayAgain} />}
-			<button className="rules-btn" onClick={() => setShowRules(true)}>
-				rules
+						))}
+					</div>
+				</div>
+			) : loading && !showOppMove ? (
+				<div className="moves__buttons">
+					<div className="moves__button-container">
+						<Button moveObj={myMove} />
+						<p>you picked</p>
+					</div>
+					<div className="moves__button-container">
+						<div className="moves__loading-circle"></div>
+						<p>the house picked</p>
+					</div>
+				</div>
+			) : (
+				<div className="moves__buttons">
+					<div className={`moves__button-container ${winner}`}>
+						<Button moveObj={myMove} />
+						<p>you picked</p>
+					</div>
+					<div
+						className={`moves__button-container opp-move ${winner}`}
+					>
+						<Button moveObj={oppMove} />
+						<p>the house picked</p>
+					</div>
+				</div>
+			)}
+			{showOppMove && (
+				<div className="result-and-play-again">
+					<div className="result-message">
+						{winner === "me"
+							? "You win"
+							: winner === "house"
+							? "You lose"
+							: "Draw"}
+					</div>
+					<button onClick={handlePlayAgain} className="play-again">
+						Play Again
+					</button>
+				</div>
+			)}
+			<button onClick={() => setShowRules(true)} className="rules-btn">
+				Rules
 			</button>
 		</div>
 	);

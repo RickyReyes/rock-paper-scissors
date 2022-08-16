@@ -1,13 +1,15 @@
 import React from "react";
 
-const Button = ({ choiceObj, handleMove, showResult }) => {
+const Button = ({ moveObj, handleMyMove }) => {
 	return (
-		<button
-			onClick={() => handleMove(choiceObj)}
-			className={`choice-border ${choiceObj.name}`}
+		<div
+			className={`button__border-container ${moveObj.name}`}
+			onClick={handleMyMove ? () => handleMyMove(moveObj.name) : null}
 		>
-			<div className="choice-white-circle">{choiceObj.svg}</div>
-		</button>
+			<div className="button__white-circle">
+				<img src={moveObj.imgSrc} alt="icon" />
+			</div>
+		</div>
 	);
 };
 
